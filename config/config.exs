@@ -5,15 +5,16 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
 config :phoenix_trello,
+  namespace: PhoenixTrello,
   ecto_repos: [PhoenixTrello.Repo]
 
 # Configures the endpoint
 config :phoenix_trello, PhoenixTrello.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "U/8I8L6yevcvo19tjv/Dlu6HBS6Jct4RTHE8ciopJy2OUuQPGBZM+lG0JfnjbJB4",
-  render_errors: [view: PhoenixTrello.ErrorView, accepts: ~w(html json)],
+  root: Path.dirname(__DIR__),
+  secret_key_base: "hWbd3QwLuaWKwJY5qYOKLGSBboxjnW46c4TzBAa+cMODz26RokgHQIJo6Nej3DGr",
+  render_errors: [accepts: ~w(html json)],
   pubsub: [name: PhoenixTrello.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
@@ -22,14 +23,21 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-#Configures Guardian Library
-config :guardian, Guardian
-issuer: "PhoenixTrello"
-ttl: {3, :days}.,
-verify_usser: true,
-secret_key: <your guardian secret key>,
-serializer: PhoenixTrello.GuardianSerializer
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
+
+# Configure phoenix generators
+config :phoenix, :generators,
+  migration: true,
+  binary_id: false
+
+# Configure guardian
+config :guardian, Guardian,
+  issuer: "PhoenixTrello",
+  ttl: { 3, :days },
+  verify_issuer: true,
+  serializer: PhoenixTrello.GuardianSerializer
+
+# Start Hound for PhantomJs
+config :hound, driver: "chrome_driver"
