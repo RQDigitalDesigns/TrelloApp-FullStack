@@ -12,6 +12,9 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.BOARDS_FETCHING:
       return { ...state, fetching: true };
 
+    case Constants.BOARDS_ADDED:
+      const{invitedBoards} = state;
+
     case Constants.BOARDS_RECEIVED:
       return { ...state, ownedBoards: action.ownedBoards, fetching: false };
 
